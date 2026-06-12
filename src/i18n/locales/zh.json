@@ -306,7 +306,8 @@
     "updateSignatureError": "更新包签名验证失败，安装已中止。",
     "updateTlsError": "安全连接失败，请检查系统时间和证书。",
     "updateParseError": "更新信息格式异常。",
-    "updateDone": "更新已安装，请重启 KeyDock。"
+    "updateDone": "更新已安装，请重启 KeyDock。",
+"downloadFromGitHub": "从 GitHub Releases 下载"
   },
   "toast": {
     "serviceExists": "\"{{name}}\" 已存在 — 表单已预填，请使用不同的名称。",

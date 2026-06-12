@@ -188,6 +188,10 @@ export function SettingsTab({
 
               {update.status === "error" && (() => {
                 const { summary, detail } = formatUpdateError(t, update.errorMessage)
+                const RELEASES_URL = "https://github.com/0xfig-labs/KeyDock/releases"
+                const releaseUrl = update.version
+                  ? `${RELEASES_URL}/tag/v${update.version}`
+                  : RELEASES_URL
                 return (
                   <div className="flex flex-col gap-1">
                     <div className="flex items-center gap-2">
@@ -203,6 +207,16 @@ export function SettingsTab({
                       <span className="text-[10px] text-red-400/70 font-mono break-all select-text">
                         {detail}
                       </span>
+                    )}
+                    {update.available && update.version && (
+                      <a
+                        href={releaseUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[11px] text-emerald-600 dark:text-emerald-400 hover:underline"
+                      >
+                        ↓ {t("settings.downloadFromGitHub")}
+                      </a>
                     )}
                   </div>
                 )

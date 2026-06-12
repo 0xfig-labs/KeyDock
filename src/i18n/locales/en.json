@@ -306,7 +306,8 @@
     "updateSignatureError": "Update package signature verification failed.",
     "updateTlsError": "Secure connection failed. Please check system time and certificates.",
     "updateParseError": "Update manifest could not be parsed.",
-    "updateDone": "Update installed. Please restart KeyDock."
+    "updateDone": "Update installed. Please restart KeyDock.",
+"downloadFromGitHub": "Download from GitHub Releases"
   },
   "toast": {
     "serviceExists": "\"{{name}}\" already exists — form pre-filled, pick a different name.",
