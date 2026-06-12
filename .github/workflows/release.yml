@@ -166,9 +166,24 @@ jobs:
           cat update.json
 
       - name: Create Release
+        id: create_release
         uses: softprops/action-gh-release@v2
         with:
           files: |
             ${{ steps.artifacts.outputs.DMG }}
             update.json
           generate_release_notes: true
+
+      - name: Clean up old releases
+        shell: bash
+        run: |
+          CURRENT_TAG="${{ github.ref_name }}"
+          gh release list --limit 50 --json tagName --jq '.[].tagName' \
+            | while read -r tag; do
+              if [ "$tag" != "$CURRENT_TAG" ]; then
+                echo "Deleting old release: $tag"
+                gh release delete "$tag" --cleanup-tag=false --yes
+              fi
+            done
+        env:
+          GH_TOKEN: ${{ github.token }}
