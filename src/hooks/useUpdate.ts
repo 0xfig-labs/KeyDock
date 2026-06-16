@@ -128,6 +128,8 @@ function extractUpdaterError(e: unknown): string {
       return "tls_error"
     if (m.includes("json") || m.includes("parse") || m.includes("unexpected"))
       return "parse_error"
+    if (m.includes("gzip") || m.includes("decompress") || m.includes("zlib"))
+      return "check_error"
     return e.message
   }
   return "unknown_error"

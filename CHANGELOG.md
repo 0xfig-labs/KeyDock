@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.6 - 2026-06-16
+
+### Fixes
+- Map "invalid gzip header" updater error to user-friendly message and show GitHub Releases download link as fallback
+
 ## 0.6.5 - 2026-06-16
 
 ### Features

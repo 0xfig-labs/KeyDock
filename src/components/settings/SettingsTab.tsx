@@ -25,6 +25,8 @@ function formatUpdateError(t: (key: string) => string, errorMessage?: string): {
       return { summary: t("settings.updateTlsError"), detail: "tls_error" }
     case "parse_error":
       return { summary: t("settings.updateParseError"), detail: "parse_error" }
+    case "check_error":
+      return { summary: t("settings.updateError"), detail: "check_error" }
     default:
       return { summary: t("settings.updateError"), detail: errorMessage }
   }
@@ -208,16 +210,14 @@ export function SettingsTab({
                         {detail}
                       </span>
                     )}
-                    {update.available && update.version && (
-                      <a
-                        href={releaseUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[11px] text-emerald-600 dark:text-emerald-400 hover:underline"
-                      >
-                        ↓ {t("settings.downloadFromGitHub")}
-                      </a>
-                    )}
+                    <a
+                      href={releaseUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[11px] text-emerald-600 dark:text-emerald-400 hover:underline"
+                    >
+                      ↓ {t("settings.downloadFromGitHub")}
+                    </a>
                   </div>
                 )
               })()}
