@@ -72,6 +72,19 @@ export const defaultFieldTemplates: Record<SecretCategory, DefaultFieldTemplate[
   ],
 }
 
+/**
+ * Convert a name to SCREAMING_SNAKE_CASE for env var naming.
+ * e.g. "Anthropic" → "ANTHROPIC", "GitHub" → "GITHUB", "My OpenAI" → "MY_OPENAI"
+ */
+export function nameToScreamingSnakeCase(name: string): string {
+  return name
+    .trim()
+    .toUpperCase()
+    .replace(/[^A-Z0-9_]+/g, "_")
+    .replace(/_+/g, "_")
+    .replace(/^_|_$/g, "")
+}
+
 export function createSecretFieldDrafts(category: SecretCategory): SecretFieldDraft[] {
   return defaultFieldTemplates[category].map((template, index) => ({
     id: `${category}-${index}-${template.label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,

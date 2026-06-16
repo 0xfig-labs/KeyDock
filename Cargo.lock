@@ -2336,7 +2336,7 @@ dependencies = [
 
 [[package]]
 name = "keydock-app"
-version = "0.6.2"
+version = "0.6.4"
 dependencies = [
  "anyhow",
  "arboard",
@@ -2355,7 +2355,7 @@ dependencies = [
 
 [[package]]
 name = "keydock-cli"
-version = "0.6.2"
+version = "0.6.4"
 dependencies = [
  "anyhow",
  "arboard",
@@ -2366,7 +2366,7 @@ dependencies = [
 
 [[package]]
 name = "keydock-core"
-version = "0.6.2"
+version = "0.6.4"
 dependencies = [
  "anyhow",
  "argon2",

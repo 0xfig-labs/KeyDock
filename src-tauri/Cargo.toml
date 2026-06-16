@@ -1,6 +1,6 @@
 [package]
 name = "keydock-app"
-version = "0.6.4"
+version = "0.6.5"
 description = "Local API Key Vault and Env Presets for Developers"
 edition.workspace = true
 license.workspace = true

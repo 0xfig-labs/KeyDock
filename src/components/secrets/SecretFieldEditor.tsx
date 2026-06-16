@@ -25,6 +25,7 @@ import {
   required,
   useFormValidation,
 } from "@/hooks/useFormValidation"
+import { nameToScreamingSnakeCase } from "@/constants"
 import type { SecretField, SecretFieldInput, SecretFieldType } from "@/types"
 
 function formatDate(date: Date): string {
@@ -91,6 +92,7 @@ interface SecretFieldEditorProps {
   onCancel: () => void
   submitting: boolean
   editingField?: boolean
+  secretName?: string
   onDelete?: () => void
   onReveal?: () => Promise<string | undefined>
   valuePreview?: string
@@ -103,6 +105,7 @@ export function SecretFieldEditor({
   onCancel,
   submitting,
   editingField,
+  secretName,
   onDelete,
   onReveal,
   valuePreview,
@@ -113,8 +116,15 @@ export function SecretFieldEditor({
   const isSensitiveType = form.sensitive || form.fieldType === "secret" || form.fieldType === "json"
 
   useEffect(() => {
-    if (form.section === "common" && (form.envName || form.sensitive)) {
-      onChange({ ...form, envName: "", sensitive: false })
+    if (form.section === "common") {
+      if (form.envName || form.sensitive) {
+        onChange({ ...form, envName: "", sensitive: false })
+      }
+    } else if (form.section === "environment" && !form.envName && secretName) {
+      const derived = nameToScreamingSnakeCase(secretName)
+      if (derived) {
+        onChange({ ...form, envName: derived })
+      }
     }
   }, [form.section])
 
@@ -275,7 +285,7 @@ export function SecretFieldEditor({
                 onChange({
                   ...form,
                   section: value,
-                  envName: value === "common" ? "" : form.envName,
+                  envName: value === "common" ? "" : (form.envName || (value === "environment" && secretName ? nameToScreamingSnakeCase(secretName) : "")),
                   sensitive: value === "common" ? false : form.sensitive,
                 })
               }

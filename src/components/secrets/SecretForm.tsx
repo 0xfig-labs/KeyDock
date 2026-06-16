@@ -295,7 +295,7 @@ export function SecretForm({
           {/* ── Fields Section ── */}
           {isEditing && editingSecretId && fieldService ? (
             <SectionCard title={t("secretForm.templateFields")}>
-              <SecretFieldList secretId={editingSecretId} fields={fieldService} />
+              <SecretFieldList secretId={editingSecretId} secretName={form.name} fields={fieldService} />
             </SectionCard>
           ) : !isEditing && fieldDrafts && onFieldDraftsChange ? (
             <SectionCard

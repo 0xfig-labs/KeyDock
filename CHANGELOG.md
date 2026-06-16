@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.6.5 - 2026-06-16
+
+### Features
+- Derive default ENV name from secret title when adding an environment field — only fills when empty, keeps template defaults like OPENAI_API_KEY as-is
+- Add silent copy for ENV name badge — click to copy env name without toast notification
+
+### Fixes
+- Show GitHub Releases download link when in-app update fails instead of generic error
+- Clean up old releases on CI — keep only the latest release assets
+
 ## 0.6.4 - 2026-06-12
 
 ### Fixes

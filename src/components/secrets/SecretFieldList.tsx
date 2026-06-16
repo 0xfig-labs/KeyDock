@@ -16,11 +16,13 @@ import type { SecretFieldForm } from "./SecretFieldEditor"
 
 interface SecretFieldListProps {
   secretId: string
+  secretName: string
   fields: UseSecretFields
 }
 
 export function SecretFieldList({
   secretId,
+  secretName,
   fields: fieldService,
 }: SecretFieldListProps) {
   const [showForm, setShowForm] = useState(false)
@@ -206,6 +208,7 @@ export function SecretFieldList({
               onCancel={closeForm}
               submitting={submitting}
               editingField={Boolean(editingFieldId)}
+              secretName={secretName}
               onReveal={handleRevealForEdit}
               valuePreview={editingValuePreview}
               onDelete={

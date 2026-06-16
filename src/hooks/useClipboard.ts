@@ -12,6 +12,7 @@ export interface UseClipboard {
     label: string
     targetId?: string
     envName?: string | null
+    silent?: boolean
   }) => Promise<void>
 }
 
@@ -21,7 +22,7 @@ export function useClipboard(): UseClipboard {
   const clearVisualRef = useRef<number | null>(null)
 
   const copy = useCallback<UseClipboard["copy"]>(
-    async ({ text, label, targetId, envName }) => {
+    async ({ text, label, targetId, envName, silent }) => {
       try {
         await copyWithAudit({
           text,
@@ -29,7 +30,9 @@ export function useClipboard(): UseClipboard {
           envName: envName ?? null,
         })
         setCopiedText(text)
-        show(`${label} copied — clears in 30s`, "success")
+        if (!silent) {
+          show(`${label} copied — clears in 30s`, "success")
+        }
 
         // Reset visual indicator after 4s.
         if (clearVisualRef.current !== null) {

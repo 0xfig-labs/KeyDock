@@ -99,6 +99,7 @@ export function SecretDetails({
       {/* Fields block */}
       <SecretFieldList
         secretId={secret.id}
+        secretName={secret.name}
         fields={fieldService}
       />
     </div>

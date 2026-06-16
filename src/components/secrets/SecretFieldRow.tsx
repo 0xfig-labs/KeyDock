@@ -43,6 +43,7 @@ function SecretFieldRowImpl({
   const isUrl = field.fieldType === "url"
   const isExpired = field.expiresAt ? new Date(field.expiresAt) < new Date() : false
   const displayValue = revealed ?? field.valuePreview ?? (isSensitive ? "••••" : "")
+  const [envNameCopied, setEnvNameCopied] = useState(false)
   const isSimple = !hasEnv && !isSensitive
 
   useEffect(() => {
@@ -110,6 +111,13 @@ function SecretFieldRowImpl({
     }
   }
 
+  async function handleCopyEnvName() {
+    if (!field.envName) return
+    await copy({ text: field.envName, label: `ENV name: ${field.envName}`, envName: field.envName, silent: true })
+    setEnvNameCopied(true)
+    setTimeout(() => setEnvNameCopied(false), 2000)
+  }
+
   const fieldTypeBadge = (
     <Badge variant="outline" className="text-[9px] py-0 px-1 font-mono uppercase border-border text-muted-foreground shrink-0">
       {field.fieldType}
@@ -174,9 +182,15 @@ function SecretFieldRowImpl({
             <span className="font-semibold text-foreground truncate text-xs">{field.label}</span>
             {fieldTypeBadge}
             {hasEnv && (
-              <code className="text-[9px] font-mono text-muted-foreground bg-muted/60 px-1 py-0.5 rounded border border-border/40 truncate max-w-[160px]">
+              <Badge
+                variant="outline"
+                className="text-[9px] font-mono py-0 px-1.5 border-border/60 text-muted-foreground cursor-pointer hover:text-foreground hover:border-foreground/30 transition-colors truncate max-w-[160px] shrink-0"
+                onClick={handleCopyEnvName}
+                title={`Copy ENV name: ${field.envName}`}
+              >
+                {envNameCopied ? <CheckIcon className="size-2.5 text-emerald-600 dark:text-emerald-400 mr-0.5" /> : null}
                 {field.envName}
-              </code>
+              </Badge>
             )}
           </div>
         </div>
