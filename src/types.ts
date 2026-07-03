@@ -143,6 +143,7 @@ export interface SecretFieldDraft {
   value: string
   sensitive: boolean
   envName: string
+  templateEnvName?: string | null
   purpose?: SecretFieldPurpose | null
   section?: string | null
   placeholder?: string

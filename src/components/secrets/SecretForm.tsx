@@ -1,4 +1,4 @@
-import { type FormEvent, useCallback, useState, useRef } from "react"
+import { type FormEvent, useCallback, useEffect, useState, useRef } from "react"
 import { PlusIcon, Trash2Icon, XIcon } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { Button } from "@/components/ui/button"
@@ -20,7 +20,7 @@ import {
 import type { UseSecretFields } from "@/hooks/useSecretFields"
 import { SECRET_CATEGORIES } from "@/types"
 import type { SecretCategory, SecretFieldDraft, SecretFieldType, SecretForm } from "@/types"
-import { createCustomFieldDraft, createSecretFieldDrafts } from "@/constants"
+import { createCustomFieldDraft, createSecretFieldDrafts, deriveEnvNameFromTemplate } from "@/constants"
 import { SecretFieldList } from "./SecretFieldList"
 
 interface SecretFormProps {
@@ -191,11 +191,29 @@ export function SecretForm({
       const category = val as SecretCategory
       onChange({ ...form, category })
       if (!isEditing && onFieldDraftsChange) {
-        onFieldDraftsChange(createSecretFieldDrafts(category))
+        onFieldDraftsChange(createSecretFieldDrafts(category, form.name))
       }
     },
     [form, isEditing, onChange, onFieldDraftsChange],
   )
+
+  // For new-secret creation: re-derive field draft envNames when the service
+  // name changes, resolving the `{SERVICE}` placeholder.
+  useEffect(() => {
+    if (isEditing || !onFieldDraftsChange || !fieldDrafts) return
+    const trimmed = form.name.trim()
+    if (!trimmed) return
+    const updated = fieldDrafts.map((draft) => {
+      if (draft.section !== "environment" || !draft.templateEnvName) return draft
+      const resolved = deriveEnvNameFromTemplate(trimmed, draft.templateEnvName)
+      if (resolved === draft.envName) return draft
+      return { ...draft, envName: resolved }
+    })
+    // Skip calling onFieldDraftsChange if nothing actually changed
+    if (updated.some((d, i) => d !== fieldDrafts[i])) {
+      onFieldDraftsChange(updated)
+    }
+  }, [form.name])
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()

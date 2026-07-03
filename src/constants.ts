@@ -32,43 +32,43 @@ export const defaultFieldTemplates: Record<SecretCategory, DefaultFieldTemplate[
     { label: "Organization ID", fieldType: "text", sensitive: false, section: "common", placeholder: "org_..." },
     { label: "Dashboard URL", fieldType: "url", sensitive: false, section: "common", placeholder: "https://platform.openai.com" },
     { label: "Docs URL", fieldType: "url", sensitive: false, section: "common", placeholder: "https://docs..." },
-    { label: "API Key", fieldType: "secret", sensitive: true, envName: "OPENAI_API_KEY", purpose: "credential", section: "environment", placeholder: "sk-...", required: true },
-    { label: "API Base URL Env", fieldType: "url", sensitive: false, envName: "OPENAI_BASE_URL", purpose: "endpoint", section: "environment", placeholder: "Optional env override" },
+    { label: "API Key", fieldType: "secret", sensitive: true, envName: "{SERVICE}_API_KEY", purpose: "credential", section: "environment", placeholder: "sk-...", required: true },
+    { label: "API Base URL Env", fieldType: "url", sensitive: false, envName: "{SERVICE}_BASE_URL", purpose: "endpoint", section: "environment", placeholder: "Optional env override" },
   ],
   cloud: [
     { label: "Dashboard URL", fieldType: "url", sensitive: false, section: "common", placeholder: "Cloud console URL" },
     { label: "Account ID", fieldType: "text", sensitive: false, section: "common", placeholder: "Account / tenant / org ID" },
-    { label: "API Token", fieldType: "secret", sensitive: true, envName: "CLOUDFLARE_API_TOKEN", purpose: "credential", section: "environment", placeholder: "Token", required: true },
-    { label: "Account ID Env", fieldType: "text", sensitive: false, envName: "CLOUDFLARE_ACCOUNT_ID", purpose: "identifier", section: "environment", placeholder: "Optional env mapping" },
+    { label: "API Token", fieldType: "secret", sensitive: true, envName: "{SERVICE}_API_TOKEN", purpose: "credential", section: "environment", placeholder: "Token", required: true },
+    { label: "Account ID Env", fieldType: "text", sensitive: false, envName: "{SERVICE}_ACCOUNT_ID", purpose: "identifier", section: "environment", placeholder: "Optional env mapping" },
   ],
   search: [
     { label: "Dashboard URL", fieldType: "url", sensitive: false, section: "common", placeholder: "Search provider dashboard" },
     { label: "Docs URL", fieldType: "url", sensitive: false, section: "common", placeholder: "API docs" },
-    { label: "API Key", fieldType: "secret", sensitive: true, envName: "TAVILY_API_KEY", purpose: "credential", section: "environment", placeholder: "API key", required: true },
+    { label: "API Key", fieldType: "secret", sensitive: true, envName: "{SERVICE}_API_KEY", purpose: "credential", section: "environment", placeholder: "API key", required: true },
   ],
   database: [
     { label: "Host", fieldType: "text", sensitive: false, section: "common", placeholder: "db.example.com" },
     { label: "Database", fieldType: "text", sensitive: false, section: "common", placeholder: "database name" },
-    { label: "Connection URL", fieldType: "url", sensitive: true, envName: "DATABASE_URL", purpose: "endpoint", section: "environment", placeholder: "postgres://...", required: true },
-    { label: "Password", fieldType: "secret", sensitive: true, envName: "DATABASE_PASSWORD", purpose: "credential", section: "environment", placeholder: "Password" },
+    { label: "Connection URL", fieldType: "url", sensitive: true, envName: "{SERVICE}_URL", purpose: "endpoint", section: "environment", placeholder: "postgres://...", required: true },
+    { label: "Password", fieldType: "secret", sensitive: true, envName: "{SERVICE}_PASSWORD", purpose: "credential", section: "environment", placeholder: "Password" },
   ],
   devTool: [
     { label: "Dashboard URL", fieldType: "url", sensitive: false, section: "common", placeholder: "Service dashboard" },
     { label: "Docs URL", fieldType: "url", sensitive: false, section: "common", placeholder: "API docs" },
-    { label: "Token", fieldType: "secret", sensitive: true, envName: "TOKEN", purpose: "credential", section: "environment", placeholder: "Token", required: true },
-    { label: "Base URL", fieldType: "url", sensitive: false, envName: "BASE_URL", purpose: "endpoint", section: "environment", placeholder: "Optional API base URL" },
+    { label: "Token", fieldType: "secret", sensitive: true, envName: "{SERVICE}_TOKEN", purpose: "credential", section: "environment", placeholder: "Token", required: true },
+    { label: "Base URL", fieldType: "url", sensitive: false, envName: "{SERVICE}_BASE_URL", purpose: "endpoint", section: "environment", placeholder: "Optional API base URL" },
   ],
   payment: [
     { label: "Dashboard URL", fieldType: "url", sensitive: false, section: "common", placeholder: "Payment dashboard" },
     { label: "Docs URL", fieldType: "url", sensitive: false, section: "common", placeholder: "API docs" },
-    { label: "Secret Key", fieldType: "secret", sensitive: true, envName: "STRIPE_SECRET_KEY", purpose: "credential", section: "environment", placeholder: "sk_live_...", required: true },
-    { label: "Publishable Key", fieldType: "text", sensitive: false, envName: "STRIPE_PUBLISHABLE_KEY", purpose: "identifier", section: "environment", placeholder: "pk_live_..." },
-    { label: "Webhook Secret", fieldType: "secret", sensitive: true, envName: "STRIPE_WEBHOOK_SECRET", purpose: "credential", section: "environment", placeholder: "whsec_..." },
+    { label: "Secret Key", fieldType: "secret", sensitive: true, envName: "{SERVICE}_SECRET_KEY", purpose: "credential", section: "environment", placeholder: "sk_live_...", required: true },
+    { label: "Publishable Key", fieldType: "text", sensitive: false, envName: "{SERVICE}_PUBLISHABLE_KEY", purpose: "identifier", section: "environment", placeholder: "pk_live_..." },
+    { label: "Webhook Secret", fieldType: "secret", sensitive: true, envName: "{SERVICE}_WEBHOOK_SECRET", purpose: "credential", section: "environment", placeholder: "whsec_..." },
   ],
   custom: [
     { label: "Website", fieldType: "url", sensitive: false, section: "common", placeholder: "https://..." },
     { label: "Username", fieldType: "text", sensitive: false, section: "common", placeholder: "Account name / email" },
-    { label: "Secret", fieldType: "secret", sensitive: true, envName: "SECRET", purpose: "credential", section: "environment", placeholder: "Token / password" },
+    { label: "Secret", fieldType: "secret", sensitive: true, envName: "{SERVICE}_SECRET", purpose: "credential", section: "environment", placeholder: "Token / password" },
   ],
 }
 
@@ -85,20 +85,40 @@ export function nameToScreamingSnakeCase(name: string): string {
     .replace(/^_|_$/g, "")
 }
 
-export function createSecretFieldDrafts(category: SecretCategory): SecretFieldDraft[] {
-  return defaultFieldTemplates[category].map((template, index) => ({
-    id: `${category}-${index}-${template.label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
-    label: template.label,
-    fieldType: template.fieldType,
-    value: "",
-    sensitive: template.sensitive,
-    envName: template.envName ?? "",
-    purpose: template.purpose ?? (template.section === "common" ? "metadata" : null),
-    section: template.section,
-    placeholder: template.placeholder,
-    required: template.required ?? false,
-    custom: false,
-  }))
+/**
+ * Derive an env name from a service name and a template env name pattern.
+ * Resolves the `{SERVICE}` placeholder to the screaming-snake-case of
+ * the service name.
+ *
+ * e.g. serviceName="Anthropic", templateEnvName="{SERVICE}_API_KEY"   → "ANTHROPIC_API_KEY"
+ *      serviceName="My Tool",   templateEnvName="{SERVICE}_TOKEN"     → "MY_TOOL_TOKEN"
+ *      serviceName="",          templateEnvName="{SERVICE}_API_KEY"   → ""
+ */
+export function deriveEnvNameFromTemplate(serviceName: string | undefined, templateEnvName: string): string {
+  if (!serviceName || !templateEnvName) return ""
+  const prefix = nameToScreamingSnakeCase(serviceName)
+  if (!prefix) return ""
+  return templateEnvName.replace("{SERVICE}", prefix)
+}
+
+export function createSecretFieldDrafts(category: SecretCategory, serviceName?: string): SecretFieldDraft[] {
+  return defaultFieldTemplates[category].map((template, index) => {
+    const rawEnvName = template.envName ?? ""
+    return {
+      id: `${category}-${index}-${template.label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
+      label: template.label,
+      fieldType: template.fieldType,
+      value: "",
+      sensitive: template.sensitive,
+      envName: deriveEnvNameFromTemplate(serviceName, rawEnvName),
+      templateEnvName: rawEnvName || null,
+      purpose: template.purpose ?? (template.section === "common" ? "metadata" : null),
+      section: template.section,
+      placeholder: template.placeholder,
+      required: template.required ?? false,
+      custom: false,
+    }
+  })
 }
 
 export function createCustomFieldDraft(index: number): SecretFieldDraft {
