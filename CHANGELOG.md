@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.7 - 2026-07-03
+
+### Fixes
+- Fix envName not deriving from secret service name on creation — templates now use `{SERVICE}` placeholder resolved at runtime
+
 ## 0.6.6 - 2026-06-16
 
 ### Fixes
