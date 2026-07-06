@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.8 - 2026-07-06
+
+### Fixes
+- Replace shadcn ScrollArea with native CSS overflow for secrets list — avoids resize observer issues
+
 ## 0.6.7 - 2026-07-03
 
 ### Fixes
