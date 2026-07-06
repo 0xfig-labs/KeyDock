@@ -61,8 +61,8 @@ jobs:
       - name: Install frontend dependencies
         run: bun install --frozen-lockfile
 
-      - name: Build macOS DMG
-        run: bun run tauri build --target aarch64-apple-darwin --bundles dmg
+      - name: Build macOS bundles
+        run: bun run tauri build --target aarch64-apple-darwin --bundles app,dmg
         env:
           # Ad-hoc sign Apple Silicon builds so downloaded apps are not treated as damaged.
           # This is not Apple Developer ID signing/notarization; users may still need to allow the app in Privacy & Security.
