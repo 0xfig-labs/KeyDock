@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.9 - 2026-07-06
+
+### Fixes
+- Fix in-app updater release artifact on macOS — publish and point update metadata to the Tauri `.app.tar.gz` bundle instead of the manual-install DMG
+
 ## 0.6.8 - 2026-07-06
 
 ### Fixes

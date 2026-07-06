@@ -67,6 +67,8 @@ jobs:
           # Ad-hoc sign Apple Silicon builds so downloaded apps are not treated as damaged.
           # This is not Apple Developer ID signing/notarization; users may still need to allow the app in Privacy & Security.
           APPLE_SIGNING_IDENTITY: "-"
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
 
       - name: Collect artifacts
         id: artifacts
@@ -84,76 +86,53 @@ jobs:
             "src-tauri/target"; do
             if [ -d "$dir" ]; then
               DMG_FILE=$(find "$dir" -maxdepth 4 -name "*.dmg" -type f -print 2>/dev/null | head -1)
-              if [ -n "$DMG_FILE" ]; then
+              UPDATER_FILE=$(find "$dir" -maxdepth 5 -name "*.app.tar.gz" -type f -print 2>/dev/null | head -1)
+              if [ -n "$DMG_FILE" ] && [ -n "$UPDATER_FILE" ]; then
                 echo "Found DMG: $DMG_FILE (in $dir)"
+                echo "Found updater bundle: $UPDATER_FILE (in $dir)"
                 break
               fi
             fi
           done
 
-          if [ -z "$DMG_FILE" ]; then
-            echo "::error::No DMG found under expected paths"
-            echo "::group::Debug: target directory structure (top 100 dirs)"
-            find target src-tauri/target -maxdepth 5 -type d 2>/dev/null | sort | head -100
-            echo "::endgroup::"
-            echo "::group::Debug: broad search for any .dmg files"
-            find . -maxdepth 8 -name "*.dmg" -type f 2>/dev/null || echo "(none found)"
+          if [ -z "$DMG_FILE" ] || [ -z "$UPDATER_FILE" ]; then
+            echo "::error::No DMG or updater .app.tar.gz found under expected paths"
+            echo "::group::Debug: bundle artifacts"
+            find target src-tauri/target -maxdepth 8 \( -name "*.dmg" -o -name "*.app.tar.gz" -o -name "*.sig" \) -type f 2>/dev/null | sort || true
             echo "::endgroup::"
             exit 1
           fi
 
-          echo "Found DMG: $DMG_FILE"
-          DMG_DIR="$(dirname "$DMG_FILE")"
-          SIG_FILE="${DMG_FILE}.sig"
-
-          # Rename to a predictable name for the release asset
-          mv "$DMG_FILE" "$DMG_DIR/KeyDock-aarch64.dmg"
-          if [ -f "$SIG_FILE" ]; then
-            mv "$SIG_FILE" "$DMG_DIR/KeyDock-aarch64.dmg.sig"
+          UPDATER_SIG_FILE="${UPDATER_FILE}.sig"
+          if [ ! -f "$UPDATER_SIG_FILE" ]; then
+            echo "::error::Updater signature not found at $UPDATER_SIG_FILE"
+            exit 1
           fi
+
+          DMG_DIR="$(dirname "$DMG_FILE")"
+          UPDATER_DIR="$(dirname "$UPDATER_FILE")"
+
+          # Rename to predictable release asset names. The updater must use the
+          # .app.tar.gz bundle on macOS; DMG is only for manual download.
+          mv "$DMG_FILE" "$DMG_DIR/KeyDock-aarch64.dmg"
+          mv "$UPDATER_FILE" "$UPDATER_DIR/KeyDock-aarch64.app.tar.gz"
+          mv "$UPDATER_SIG_FILE" "$UPDATER_DIR/KeyDock-aarch64.app.tar.gz.sig"
 
           echo "DMG=$DMG_DIR/KeyDock-aarch64.dmg" >> "$GITHUB_OUTPUT"
-          echo "DMG_DIR=$DMG_DIR" >> "$GITHUB_OUTPUT"
-
-      - name: Sign DMG for Tauri updater
-        shell: bash
-        env:
-          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
-          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
-        run: |
-          DMG_DIR="${{ steps.artifacts.outputs.DMG_DIR }}"
-          DMG_FILE="$DMG_DIR/KeyDock-aarch64.dmg"
-          if [ ! -f "$DMG_FILE" ]; then
-            echo "::error::DMG not found at $DMG_FILE"
-            exit 1
-          fi
-          echo "Signing $DMG_FILE..."
-          # Use the npm @tauri-apps/cli (not cargo-tauri) since it's already
-          # installed as a devDependency and available via bun.
-          bun run tauri signer sign \
-            -k "$TAURI_SIGNING_PRIVATE_KEY" \
-            -p "$TAURI_SIGNING_PRIVATE_KEY_PASSWORD" \
-            "$DMG_FILE" 2>&1
-          if [ -f "${DMG_FILE}.sig" ]; then
-            echo "Signature created successfully"
-            cat "${DMG_FILE}.sig"
-          else
-            echo "::error::Signature was not created"
-            exit 1
-          fi
+          echo "UPDATER=$UPDATER_DIR/KeyDock-aarch64.app.tar.gz" >> "$GITHUB_OUTPUT"
+          echo "UPDATER_SIG=$UPDATER_DIR/KeyDock-aarch64.app.tar.gz.sig" >> "$GITHUB_OUTPUT"
 
       - name: Generate update.json
         shell: bash
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
-          DMG_DIR="${{ steps.artifacts.outputs.DMG_DIR }}"
-          SIG=$(cat "$DMG_DIR/KeyDock-aarch64.dmg.sig" 2>/dev/null || echo "")
+          SIG=$(cat "${{ steps.artifacts.outputs.UPDATER_SIG }}" 2>/dev/null || echo "")
 
           jq -n \
             --arg v "$VERSION" \
             --arg date "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
             --arg sig "$SIG" \
-            --arg url "https://github.com/0xfig-labs/KeyDock/releases/download/${{ github.ref_name }}/KeyDock-aarch64.dmg" \
+            --arg url "https://github.com/0xfig-labs/KeyDock/releases/download/${{ github.ref_name }}/KeyDock-aarch64.app.tar.gz" \
             '{
               version: $v,
               pub_date: $date,
@@ -171,6 +150,7 @@ jobs:
         with:
           files: |
             ${{ steps.artifacts.outputs.DMG }}
+            ${{ steps.artifacts.outputs.UPDATER }}
             update.json
           generate_release_notes: true
 
