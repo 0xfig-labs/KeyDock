@@ -14,7 +14,6 @@ import { useTranslation } from "react-i18next"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { useToast } from "@/hooks/useToast"
 import { useConfirm } from "@/components/ui/confirm-dialog"
 import { usePresetDetails } from "@/hooks/usePresetDetails"
@@ -366,7 +365,7 @@ export function PresetDetails({
               </Button>
             </div>
 
-            <ScrollArea className="max-h-72">
+            <div className="max-h-72 overflow-y-auto overflow-x-hidden space-y-0.5">
               {secretsLoading ? (
                 <div className="flex items-center justify-center py-8">
                   <span className="size-4 animate-spin rounded-full border-2 border-muted-foreground border-t-transparent" />
@@ -509,7 +508,7 @@ export function PresetDetails({
                   })}
                 </div>
               )}
-            </ScrollArea>
+            </div>
           </div>
         )}
 
