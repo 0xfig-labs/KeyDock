@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.6.11 - 2026-07-10
+
+### Features
+- License: change from MIT to AGPL-3.0-only + commercial option
+- CI: build universal macOS DMG (aarch64 + x86_64)
+- App updater: target `macos-universal` artifact, fix install/done status flow
+
+### Website
+- Card-style features layout, remove SocialProof section
+- Update badges for license and macOS-only platform
+- FAQ, Hero, Footer refresh with AGPL + commercial licensing info
+
+### Docs
+- README updates for AGPL license and universal macOS install with Gatekeeper guide
+- Add LICENSE, COMMERCIAL-LICENSE.md, CONTRIBUTING.md, PRIVACY.md
+
 ## 0.6.10 - 2026-07-06
 
 ### Fixes

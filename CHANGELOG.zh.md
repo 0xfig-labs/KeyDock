@@ -1,5 +1,21 @@
 # 更新日志
 
+## 0.6.11 - 2026-07-10
+
+### 特性
+- 许可协议：MIT → AGPL-3.0-only + 商业授权
+- CI：构建通用 macOS DMG（aarch64 + x86_64）
+- 应用更新：目标 `macos-universal` 更新包，修复安装/完成状态流转
+
+### 网站
+- 特性卡片式布局，移除 SocialProof 部分
+- 更新许可证和 macOS 专属平台徽章
+- FAQ、Hero、Footer 刷新，包含 AGPL + 商业授权信息
+
+### 文档
+- README 更新 AGPL 许可和通用 macOS 安装指南
+- 增加 LICENSE、COMMERCIAL-LICENSE.md、CONTRIBUTING.md、PRIVACY.md
+
 ## 0.6.10 - 2026-07-06
 
 ### 修复
