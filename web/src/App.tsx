@@ -1,6 +1,5 @@
 import { Navigation } from "@/components/Navigation";
 import { Hero } from "@/components/Hero";
-import { SocialProof } from "@/components/SocialProof";
 import { Features } from "@/components/Features";
 import { HowItWorks } from "@/components/HowItWorks";
 import { SecurityModel } from "@/components/SecurityModel";
@@ -14,7 +13,7 @@ const RELEASES_URL = "https://github.com/0xfig-labs/KeyDock/releases";
 const GITHUB_URL = "https://github.com/0xfig-labs/KeyDock";
 
 function App() {
-  const { stars, downloads, loading } = useGitHubStats("0xfig-labs", "KeyDock");
+  const { stars, loading } = useGitHubStats("0xfig-labs", "KeyDock");
 
   return (
     <>
@@ -30,7 +29,7 @@ function App() {
             image: "https://keydock.0xfig.xyz/og-image.png",
             applicationCategory: "DeveloperApplication",
             applicationSubCategory: "Secret management and environment variable presets",
-            operatingSystem: "macOS, Windows, Linux",
+            operatingSystem: "macOS",
             description:
               "Local encrypted API key vault with reusable env presets. Store developer secrets locally, compose presets, activate shell environments, or inject scoped variables into one command.",
             offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
@@ -45,12 +44,6 @@ function App() {
         primaryCta={{ label: "Download for free", href: RELEASES_URL }}
         secondaryCta={{ label: "View on GitHub", href: GITHUB_URL }}
         screenshotSrc="/hero-screenshot.png"
-      />
-      <SocialProof
-        quote="Switching models, clouds, and client projects used to mean chasing scattered .env files. Now one preset gives every new shell the exact env vars it needs."
-        attribution="Early KeyDock user"
-        stars={loading ? 0 : stars}
-        downloads={loading ? 0 : downloads}
       />
       <Features />
       <HowItWorks />

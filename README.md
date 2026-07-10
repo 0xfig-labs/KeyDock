@@ -22,7 +22,7 @@
   <img alt="Tauri" src="https://img.shields.io/badge/Tauri-v2-24c8db?style=flat-square" />
   <img alt="React" src="https://img.shields.io/badge/React-18-61dafb?style=flat-square" />
   <img alt="Rust" src="https://img.shields.io/badge/Rust-core-f97316?style=flat-square" />
-  <img alt="License" src="https://img.shields.io/badge/license-MIT-111827?style=flat-square" />
+  <img alt="License" src="https://img.shields.io/badge/license-AGPL--3.0-111827?style=flat-square" />
 </p>
 
 ---
@@ -30,6 +30,8 @@
 ## English
 
 > KeyDock is a **local-first vault for developer API keys**, with activatable env presets. Store secrets locally, compose them into reusable presets, and activate one global env set for all new terminals.
+
+> **License:** KeyDock is dual-licensed: [AGPLv3](LICENSE) for open-source use, or a [commercial license](COMMERCIAL-LICENSE.md) for use that cannot comply with AGPLv3.
 
 KeyDock is not trying to replace enterprise SecretOps platforms. It focuses on the developer workstation layer: solo developers, small teams, and AI-assisted coding workflows where `.env` sprawl and global shell exports are too easy to leak.
 
@@ -96,6 +98,14 @@ KeyDock
 
 ### Quick start
 
+#### Install the app (macOS)
+
+Download the **universal macOS DMG** from [GitHub Releases](https://github.com/0xfig-labs/KeyDock/releases/latest). It runs natively on both Apple Silicon and Intel Macs.
+
+Current builds are ad-hoc signed, not notarized. If macOS blocks the first launch, move KeyDock to **Applications**, then Control-click it, choose **Open**, and confirm. You only need to do this once.
+
+KeyDock stores your vault locally. It does not include analytics; checking for app updates contacts the configured GitHub Releases endpoint. Activating a preset creates a local plaintext environment-variable cache—prefer `keydock run <preset> -- <cmd>` for command-scoped access.
+
 #### Prerequisites
 
 - [Bun](https://bun.sh/)
@@ -153,7 +163,7 @@ KeyDock is designed as a **local-first** vault:
 - One-shot command injection avoids polluting the global shell and is the preferred path for AI-agent or automation workflows.
 - Touch ID / passkey unlock is planned as a convenience path, not the root trust anchor.
 
-> Treat activated preset env caches like any other plaintext shell secret: convenient, local, and intentionally short-lived in your workflow.
+> Treat activated preset env caches like any other plaintext shell secret: convenient, local, and intentionally short-lived in your workflow. KeyDock does not make this cache swap-proof.
 
 For AI coding agents, prefer `keydock run <preset> -- <cmd>` over globally exporting secrets. The intended trust boundary is command-scoped access, not “the agent can read the whole shell environment”.
 

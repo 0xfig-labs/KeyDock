@@ -25,9 +25,9 @@ const securityCards: SecurityCard[] = [
   {
     icon: Lock,
     label: "Memory",
-    title: "In-memory only",
+    title: "While unlocked",
     description:
-      "The unwrapped data-encryption key exists only in application heap memory while the vault is unlocked. It is never written to disk or swap.",
+      "The unwrapped data-encryption key is held in application memory while the vault is unlocked. Protect the device and lock the vault when you are done.",
   },
   {
     icon: Eye,
@@ -46,8 +46,7 @@ export function SecurityModel() {
           Local-first security, built for agent-era workflows.
         </h2>
         <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-12">
-          KeyDock keeps secrets on your machine, makes env exposure intentional,
-          and records sensitive actions in a local audit trail.
+          Vault data is stored locally; update checks contact GitHub but do not upload vault contents. KeyDock makes env exposure intentional and records sensitive actions in a local audit trail.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

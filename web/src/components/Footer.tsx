@@ -21,7 +21,9 @@ const defaultLinks: FooterLink[] = [
   { label: "Documentation", href: "https://github.com/0xfig-labs/KeyDock#readme" },
   { label: "CLI Reference", href: "https://github.com/0xfig-labs/KeyDock#cli-reference" },
   { label: "Security", href: "https://github.com/0xfig-labs/KeyDock/security" },
-  { label: "License", href: "https://github.com/0xfig-labs/KeyDock/blob/main/LICENSE" },
+  { label: "Privacy", href: "https://github.com/0xfig-labs/KeyDock/blob/main/PRIVACY.md" },
+  { label: "AGPLv3 License", href: "https://github.com/0xfig-labs/KeyDock/blob/main/LICENSE" },
+  { label: "Commercial License", href: "https://github.com/0xfig-labs/KeyDock/blob/main/COMMERCIAL-LICENSE.md" },
 ];
 
 export function Footer({
@@ -40,8 +42,8 @@ export function Footer({
           </h2>
 
           <p className="mb-8 text-sm text-muted-foreground">
-            Download the desktop app and CLI, create your vault, and replace scattered
-            .env files with reusable presets — no sign-up or telemetry.
+            Download the universal macOS app and CLI, create your vault, and replace scattered
+            .env files with reusable presets. The app stores vault data locally and checks GitHub for updates.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
@@ -85,7 +87,7 @@ export function Footer({
               KeyDock &mdash; Local API Key Vault & Env Presets
             </p>
             <p className="text-xs text-muted-foreground/60">
-              Local-first. Open source. MIT licensed.
+              Local-first. AGPLv3 or commercial license.
             </p>
           </div>
         </div>

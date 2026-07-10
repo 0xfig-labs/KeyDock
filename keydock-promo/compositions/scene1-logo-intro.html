@@ -1,0 +1,113 @@
+<template id="scene1-logo-intro-template">
+  <div
+    data-composition-id="scene1-logo-intro"
+    data-width="1920"
+    data-height="1080"
+    data-duration="2.5"
+  >
+    <div class="canvas">
+      <!-- Gradient Orbs -->
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+
+      <!-- Logo -->
+      <div class="logo-container">
+        <img src="../assets/keydock-icon.png" alt="KeyDock" class="logo-img" />
+      </div>
+
+      <!-- Tagline -->
+      <div class="tagline-line">
+        <span class="tagline-text">Reusable env presets for AI-era developers</span>
+      </div>
+    </div>
+
+    <style>
+      [data-composition-id="scene1-logo-intro"] .canvas {
+        width: 1920px;
+        height: 1080px;
+        background: #0a0a0f;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      [data-composition-id="scene1-logo-intro"] .orb {
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+      }
+
+      [data-composition-id="scene1-logo-intro"] .orb-1 {
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, transparent 70%);
+        top: 200px;
+        left: 600px;
+      }
+
+      [data-composition-id="scene1-logo-intro"] .orb-2 {
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+        bottom: 100px;
+        right: 500px;
+      }
+
+      [data-composition-id="scene1-logo-intro"] .logo-container {
+        width: 120px;
+        height: 120px;
+        margin-bottom: 40px;
+        opacity: 0;
+        transform: scale(0.5);
+      }
+
+      [data-composition-id="scene1-logo-intro"] .logo-img {
+        width: 120px;
+        height: 120px;
+        border-radius: 24px;
+      }
+
+      [data-composition-id="scene1-logo-intro"] .tagline-line {
+        overflow: hidden;
+      }
+
+      [data-composition-id="scene1-logo-intro"] .tagline-text {
+        font-family: "Inter", sans-serif;
+        font-size: 28px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.6);
+        letter-spacing: -0.01em;
+        display: block;
+        transform: translateY(100%);
+        opacity: 0;
+      }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const tl = gsap.timeline({ paused: true });
+
+        const cid = '[data-composition-id="scene1-logo-intro"]';
+        const logo = cid + ' .logo-container';
+        const tagline = cid + ' .tagline-text';
+
+        // Logo pop in
+        tl.to(logo, { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" }, 0);
+
+        // Tagline slide up
+        tl.to(tagline, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 0.6);
+
+        // Hold for a moment then subtle scale up
+        tl.to(logo, { scale: 1.05, duration: 0.3, ease: "power1.out" }, 1.8);
+        tl.to(logo, { scale: 1, duration: 0.2, ease: "power1.in" }, 2.1);
+
+        window.__timelines = window.__timelines || {};
+        window.__timelines["scene1-logo-intro"] = tl;
+      })();
+    </script>
+  </div>
+</template>

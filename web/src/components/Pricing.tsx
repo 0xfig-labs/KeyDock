@@ -42,21 +42,20 @@ export function Pricing({
     >
       <div className="mx-auto max-w-4xl px-4 text-center">
         <h2 className="mb-4 text-3xl font-semibold tracking-tight md:text-4xl">
-          Free. Open source.
+          Open source, with a commercial path.
           <br />
           <span className="text-primary">Your data stays yours.</span>
         </h2>
 
         <p className="mx-auto mb-10 max-w-2xl text-muted-foreground">
-          KeyDock is released under the MIT license — no paid tiers, no feature
-          gates, no telemetry. The source is open for audit, forks, and
-          contributions from developers who want safer local secret workflows.
+          KeyDock is available under AGPLv3 for open-source use. A commercial
+          license is available for teams and products that cannot comply with AGPLv3.
         </p>
 
         <div className="mb-10">
           <span className="text-6xl font-bold md:text-7xl">Free</span>
           <span className="ml-2 text-lg text-muted-foreground">
-            &mdash; always
+            &mdash; AGPLv3 edition
           </span>
         </div>
 
@@ -91,7 +90,7 @@ export function Pricing({
         </div>
 
         <p className="mt-10 text-xs text-muted-foreground/60">
-          No cloud. No tracking. No subscription.
+          Local-first. GitHub is contacted only for release downloads and in-app update checks.
         </p>
       </div>
     </section>

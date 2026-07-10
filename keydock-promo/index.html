@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>KeyDock Promo</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=block"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html, body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #0a0a0f;
+        font-family: "Inter", sans-serif;
+      }
+      .scene {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+      .caption-text-wrapper {
+        position: absolute;
+        bottom: 120px;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        pointer-events: none;
+        overflow: hidden;
+        padding: 10px 0;
+      }
+      .caption-line {
+        color: white;
+        font-size: 40px;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        text-align: center;
+        text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        transform: translateY(100%);
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="42"
+      data-width="1920"
+      data-height="1080"
+    >
+      <!-- Scene 1: Logo Intro -->
+      <div
+        id="scene-1"
+        class="scene"
+        data-composition-id="scene1-logo-intro"
+        data-composition-src="compositions/scene1-logo-intro.html"
+        data-start="0"
+        data-duration="2.5"
+        data-track-index="1"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <!-- Scene 2: The Problem -->
+      <div
+        id="scene-2"
+        class="scene"
+        data-composition-id="scene2-problem"
+        data-composition-src="compositions/scene2-problem.html"
+        data-start="2.5"
+        data-duration="11.5"
+        data-track-index="1"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <!-- Scene 3: How it works -->
+      <div
+        id="scene-3"
+        class="scene"
+        data-composition-id="scene3-how-it-works"
+        data-composition-src="compositions/scene3-how-it-works.html"
+        data-start="14"
+        data-duration="12"
+        data-track-index="1"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <!-- Scene 4: Use Cases & CTA -->
+      <div
+        id="scene-4"
+        class="scene"
+        data-composition-id="scene4-usecases"
+        data-composition-src="compositions/scene4-usecases.html"
+        data-start="26"
+        data-duration="8"
+        data-track-index="1"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <!-- Scene 5: Outro -->
+      <div
+        id="scene-5"
+        class="scene"
+        data-composition-id="scene5-outro"
+        data-composition-src="compositions/scene5-outro.html"
+        data-start="34"
+        data-duration="8"
+        data-track-index="1"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <!-- Captions -->
+      <div
+        id="captions-comp"
+        data-composition-id="captions"
+        data-start="2.5"
+        data-duration="31.5"
+        data-track-index="2"
+        data-width="1920"
+        data-height="1080"
+      >
+        <div class="caption-text-wrapper">
+          <div id="caption-text" class="caption-line">API keys scattered everywhere?</div>
+        </div>
+
+        <script>
+          (function () {
+            const tl = gsap.timeline({ paused: true });
+            const text = document.querySelector("#caption-text");
+
+            // Scene 2
+            tl.to(text, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 0);
+            tl.to(text, { opacity: 0, y: -20, duration: 0.3, ease: "power3.in" }, 2.5);
+            tl.set(text, { innerText: "One local vault. One command.", y: 40 }, 2.8);
+            tl.to(text, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 2.8);
+            tl.to(text, { opacity: 0, y: -20, duration: 0.3, ease: "power3.in" }, 6.0);
+            tl.set(text, { innerText: "Compose presets. Activate anywhere.", y: 40 }, 6.3);
+            tl.to(text, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 6.3);
+            tl.to(text, { opacity: 0, y: -20, duration: 0.3, ease: "power3.in" }, 9.5);
+            tl.set(text, { innerText: "Your secrets stay on your machine.", y: 40 }, 9.8);
+            tl.to(text, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 9.8);
+            tl.to(text, { opacity: 0, y: -20, duration: 0.3, ease: "power3.in" }, 12.5);
+
+            // Scene 3
+            tl.set(text, { innerText: "keydock preset activate fullstack-dev", y: 40 }, 12.8);
+            tl.to(text, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 12.8);
+            tl.to(text, { opacity: 0, y: -20, duration: 0.3, ease: "power3.in" }, 16.0);
+            tl.set(text, { innerText: "Desktop control center for secrets.", y: 40 }, 16.3);
+            tl.to(text, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 16.3);
+            tl.to(text, { opacity: 0, y: -20, duration: 0.3, ease: "power3.in" }, 20.0);
+            tl.set(text, { innerText: "Argon2id + ChaCha20Poly1305 encrypted.", y: 40 }, 20.3);
+            tl.to(text, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 20.3);
+            tl.to(text, { opacity: 0, y: -20, duration: 0.3, ease: "power3.in" }, 23.5);
+            tl.set(text, { innerText: "Audit trail for every sensitive action.", y: 40 }, 23.8);
+            tl.to(text, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 23.8);
+            tl.to(text, { opacity: 0, y: -20, duration: 0.3, ease: "power3.in" }, 27.0);
+
+            // Scene 4
+            tl.set(text, { innerText: "For AI devs, cloud engineers, freelancers.", y: 40 }, 27.3);
+            tl.to(text, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 27.3);
+            tl.to(text, { opacity: 0, y: -20, duration: 0.3, ease: "power3.in" }, 30.5);
+            tl.set(text, { innerText: "Open source. MIT licensed.", y: 40 }, 30.8);
+            tl.to(text, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 30.8);
+
+            window.__timelines = window.__timelines || {};
+            window.__timelines["captions"] = tl;
+          })();
+        </script>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const mainTl = gsap.timeline({ paused: true });
+
+      window.__timelines["main"] = mainTl;
+    </script>
+  </body>
+</html>

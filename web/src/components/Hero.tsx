@@ -16,8 +16,8 @@ interface HeroProps {
 
 const trustMarkers: TrustMarker[] = [
   { Icon: Shield, label: "Local encrypted vault" },
-  { label: "MIT Licensed" },
-  { Icon: Monitor, label: "macOS · Linux · Windows" },
+  { label: "AGPLv3 + commercial" },
+  { Icon: Monitor, label: "Universal macOS (Intel + Apple Silicon)" },
   { Icon: Terminal, label: "Preset CLI included" },
 ];
 
@@ -76,6 +76,10 @@ export function Hero({
                 {secondaryCta.label}
               </a>
             </div>
+
+            <p className="mt-4 rounded-lg border border-amber-500/30 bg-amber-500/5 px-3 py-2 text-left text-xs leading-relaxed text-muted-foreground">
+              macOS preview: the app is ad-hoc signed, not notarized. If Gatekeeper blocks it, move it to Applications, then Control-click it and choose Open; if needed, allow it in System Settings → Privacy &amp; Security.
+            </p>
 
             {/* Trust markers */}
             <div className="mt-10 grid grid-cols-2 sm:flex sm:flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-3 text-sm text-muted-foreground">

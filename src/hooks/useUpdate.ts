@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useState } from "react"
 import { check } from "@tauri-apps/plugin-updater"
 
+// A universal app must request the universal updater artifact on both Mac architectures.
+const UPDATE_TARGET = "macos-universal"
+
 export interface UpdateInfo {
   /** True when a newer version is available */
   available: boolean
@@ -32,7 +35,7 @@ export function useUpdate() {
   const checkForUpdates = useCallback(async (): Promise<CheckResult> => {
     setUpdate((prev) => ({ ...prev, status: "checking", errorMessage: undefined }))
     try {
-      const result = await check()
+      const result = await check({ target: UPDATE_TARGET })
       if (result?.available) {
         setUpdate({
           available: true,
@@ -64,7 +67,7 @@ export function useUpdate() {
 
   const installUpdate = useCallback(async () => {
     try {
-      const result = await check()
+      const result = await check({ target: UPDATE_TARGET })
       if (!result?.available) return
 
       setUpdate((prev) => ({ ...prev, status: "downloading", downloading: true, errorMessage: undefined }))
@@ -88,12 +91,12 @@ export function useUpdate() {
             break
           }
           case "Finished":
-            setUpdate((prev) => ({ ...prev, progress: 1 }))
+            setUpdate((prev) => ({ ...prev, status: "installing", progress: 1 }))
             break
         }
       })
 
-      setUpdate((prev) => ({ ...prev, status: "installing", downloading: false }))
+      setUpdate((prev) => ({ ...prev, status: "done", downloading: false, progress: 1 }))
     } catch (e) {
       const message = extractUpdaterError(e)
       console.error("[updater] install failed:", e)

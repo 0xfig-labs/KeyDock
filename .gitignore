@@ -5,7 +5,6 @@
 /.DS_Store
 *.log
 /.antigravitycli
-/bun.lock
 
 # Tauri updater signing key (DO NOT COMMIT)
 /.tauri/key.pem

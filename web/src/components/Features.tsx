@@ -6,7 +6,6 @@ interface FeatureBlockProps {
   icon: LucideIcon;
   title: string;
   description: string;
-  imagePosition: "left" | "right";
   index: number;
 }
 
@@ -45,7 +44,6 @@ function FeatureBlock({
   icon: Icon,
   title,
   description,
-  imagePosition,
   index,
 }: FeatureBlockProps) {
   const { ref, isVisible } = useScrollReveal<HTMLDivElement>();
@@ -54,33 +52,17 @@ function FeatureBlock({
     <div
       ref={ref}
       className={cn(
-        "grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-16 items-center mb-16 md:mb-24 last:mb-0",
+        "mx-auto mb-6 max-w-3xl rounded-xl border border-border bg-card p-6 md:p-8 last:mb-0",
         "transition-all duration-700 ease-out",
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
       )}
       style={{ transitionDelay: `${index * 150}ms` }}
     >
-      {imagePosition === "right" && (
-        <div>
-          <div className="size-10 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
-            <Icon className="size-5 text-primary" />
-          </div>
-          <h3 className="text-xl font-semibold text-foreground mb-3">{title}</h3>
-          <p className="text-muted-foreground leading-relaxed">{description}</p>
-        </div>
-      )}
-      <div className="bg-card border border-border rounded-xl h-48 md:h-64 flex items-center justify-center text-muted-foreground">
-        Feature illustration
+      <div className="size-10 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
+        <Icon className="size-5 text-primary" />
       </div>
-      {imagePosition === "left" && (
-        <div>
-          <div className="size-10 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
-            <Icon className="size-5 text-primary" />
-          </div>
-          <h3 className="text-xl font-semibold text-foreground mb-3">{title}</h3>
-          <p className="text-muted-foreground leading-relaxed">{description}</p>
-        </div>
-      )}
+      <h3 className="text-xl font-semibold text-foreground mb-3">{title}</h3>
+      <p className="text-muted-foreground leading-relaxed">{description}</p>
     </div>
   );
 }
@@ -103,7 +85,6 @@ export function Features() {
             icon={feature.icon}
             title={feature.title}
             description={feature.description}
-            imagePosition={i % 2 === 0 ? "right" : "left"}
             index={i}
           />
         ))}

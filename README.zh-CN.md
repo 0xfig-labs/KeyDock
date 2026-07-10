@@ -22,12 +22,14 @@
   <img alt="Tauri" src="https://img.shields.io/badge/Tauri-v2-24c8db?style=flat-square" />
   <img alt="React" src="https://img.shields.io/badge/React-18-61dafb?style=flat-square" />
   <img alt="Rust" src="https://img.shields.io/badge/Rust-core-f97316?style=flat-square" />
-  <img alt="License" src="https://img.shields.io/badge/license-MIT-111827?style=flat-square" />
+  <img alt="License" src="https://img.shields.io/badge/license-AGPL--3.0-111827?style=flat-square" />
 </p>
 
 ---
 
 > KeyDock 是**本地优先的开发者 API Key 保险库**，并支持一键激活环境变量 Presets。本地保存密钥，组合成可复用的 Presets，一键激活到所有新终端。
+
+> **许可证：** KeyDock 采用双重许可：开源使用遵循 [AGPLv3](LICENSE)；无法遵守 AGPLv3 时需要[商业许可证](COMMERCIAL-LICENSE.md)。
 
 KeyDock 不打算一开始就替代企业级 SecretOps / Vault 平台。它优先解决开发者工作站这一层：个人开发者、小团队、AI 辅助编程场景里，`.env` 四处复制和全局 shell export 太容易泄露。
 
@@ -96,6 +98,14 @@ KeyDock
 
 ## 快速开始
 
+### 安装应用（macOS）
+
+从 [GitHub Releases](https://github.com/0xfig-labs/KeyDock/releases/latest) 下载 **通用 macOS DMG**。它同时原生支持 Apple Silicon 和 Intel Mac。
+
+当前构建使用 ad-hoc 签名，尚未公证。若 macOS 首次阻止打开，请先将 KeyDock 拖到 **应用程序**，再按住 Control 点击应用、选择“打开”并确认；此操作只需一次。
+
+KeyDock 将保险库数据保存在本地，不包含分析遥测；检查应用更新时会访问配置的 GitHub Releases 地址。激活 preset 会在本地创建明文环境变量缓存；涉及 AI 或自动化时，优先使用 `keydock run <preset> -- <cmd>` 的命令级注入。
+
 ### 环境要求
 
 - [Bun](https://bun.sh/)
@@ -153,7 +163,7 @@ KeyDock 的默认设计是 **local-first**：
 - 单次命令注入不会污染全局 shell，是 AI agent 和自动化命令的优先推荐路径。
 - Touch ID / passkey 计划作为便利解锁路径，而不是唯一根密钥。
 
-> 请像对待其它明文 shell secret 一样对待已激活的预设缓存：它是本地的、方便的，也应当只在需要时短期存在。
+> 请像对待其它明文 shell secret 一样对待已激活的预设缓存：它是本地的、方便的，也应当只在需要时短期存在。KeyDock 不会让这份缓存免受 swap 影响。
 
 对于 AI 编程助手，优先使用 `keydock run <preset> -- <cmd>`，不要全局导出密钥。KeyDock 期望建立的信任边界是“命令级访问”，而不是“agent 能读取整个 shell 环境”。
 

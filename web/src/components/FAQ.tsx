@@ -21,12 +21,17 @@ const defaultItems: FaqItem[] = [
   {
     question: "Is it secure?",
     answer:
-      "Your vault is encrypted with Argon2id key derivation and ChaCha20-Poly1305 authenticated encryption. The decryption key lives in application memory only while the vault is unlocked. KeyDock makes no network requests — your secrets never leave your machine.",
+      "Your vault uses Argon2id key derivation and ChaCha20-Poly1305 authenticated encryption. Secret data is stored locally; while unlocked, its key is held in app memory. KeyDock can contact GitHub to check for app updates, but it does not upload vault contents as part of that check. Local encryption reduces accidental exposure; it does not replace device security or careful command review.",
   },
   {
-    question: "Does it work on macOS / Linux / Windows?",
+    question: "Which platforms are available?",
     answer:
-      "Yes. KeyDock is built with Tauri, so the desktop app runs on all three platforms. The CLI is a single Rust binary that works anywhere Rust targets are supported.",
+      "Current releases are universal macOS builds for Intel and Apple Silicon. Linux and Windows are not currently distributed as supported releases.",
+  },
+  {
+    question: "How do I install the macOS preview?",
+    answer:
+      "Download the DMG, drag KeyDock to Applications, then open it. This preview is ad-hoc signed and not notarized: if macOS blocks it, Control-click the app and choose Open; if necessary, allow it in System Settings → Privacy & Security.",
   },
   {
     question: "Can I use it without the desktop app?",

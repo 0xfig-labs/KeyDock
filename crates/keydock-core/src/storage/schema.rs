@@ -246,7 +246,6 @@ impl AppStore {
              CREATE INDEX IF NOT EXISTS idx_preset_entries_lookup
                  ON preset_entries(preset_id, env_name);
              DROP TABLE IF EXISTS preset_variables;
-             DROP TABLE IF EXISTS presets;
              PRAGMA foreign_keys = ON;",
         )?;
         Ok(())

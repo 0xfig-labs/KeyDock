@@ -1,0 +1,17 @@
+Tired of API keys scattered across a dozen dot env files?
+
+KeyDock gives you one local encrypted vault to store them all.
+
+Compose reusable presets from OpenAI, Anthropic, Cloudflare.
+
+Activate one preset, and every new terminal has the right env vars.
+
+Use keydock run to inject secrets into a single command.
+
+The desktop app gives you full control over secrets, presets, and audit logs.
+
+Built for AI developers, cloud engineers, and freelancers.
+
+Open source. MIT licensed. Your secrets stay on your machine.
+
+Star KeyDock on GitHub and take control of your dev environment.

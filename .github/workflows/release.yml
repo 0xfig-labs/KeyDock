@@ -22,7 +22,7 @@ concurrency:
 
 jobs:
   build-macos:
-    name: Build macOS (Apple Silicon)
+    name: Build macOS (Universal)
     runs-on: macos-latest
     permissions:
       contents: write
@@ -47,7 +47,8 @@ jobs:
       - name: Setup Rust
         uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
-          target: aarch64-apple-darwin
+          # Tauri's virtual universal target merges these two Rust targets.
+          target: aarch64-apple-darwin, x86_64-apple-darwin
 
       - name: Cache Rust dependencies
         uses: Swatinem/rust-cache@v2
@@ -56,15 +57,21 @@ jobs:
             src-tauri
             crates/keydock-core
             crates/keydock-cli
-          key: aarch64-apple-darwin
+          key: universal-apple-darwin
 
       - name: Install frontend dependencies
         run: bun install --frozen-lockfile
 
-      - name: Build macOS bundles
-        run: bun run tauri build --target aarch64-apple-darwin --bundles app,dmg
+      - name: Run checks
+        run: |
+          bun run build
+          bunx vitest run
+          cargo test --workspace
+
+      - name: Build universal macOS bundles
+        run: bun run tauri build --target universal-apple-darwin --bundles app,dmg
         env:
-          # Ad-hoc sign Apple Silicon builds so downloaded apps are not treated as damaged.
+          # Ad-hoc sign universal macOS builds so downloaded apps are not treated as damaged.
           # This is not Apple Developer ID signing/notarization; users may still need to allow the app in Privacy & Security.
           APPLE_SIGNING_IDENTITY: "-"
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
@@ -78,9 +85,9 @@ jobs:
           #   target/<target>/release/bundle/
           # In Cargo workspaces the root target/ is used (not src-tauri/target/).
           for dir in \
-            "target/aarch64-apple-darwin/release/bundle" \
+            "target/universal-apple-darwin/release/bundle" \
             "target/release/bundle" \
-            "src-tauri/target/aarch64-apple-darwin/release/bundle" \
+            "src-tauri/target/universal-apple-darwin/release/bundle" \
             "src-tauri/target/release/bundle" \
             "target" \
             "src-tauri/target"; do
@@ -114,13 +121,13 @@ jobs:
 
           # Rename to predictable release asset names. The updater must use the
           # .app.tar.gz bundle on macOS; DMG is only for manual download.
-          mv "$DMG_FILE" "$DMG_DIR/KeyDock-aarch64.dmg"
-          mv "$UPDATER_FILE" "$UPDATER_DIR/KeyDock-aarch64.app.tar.gz"
-          mv "$UPDATER_SIG_FILE" "$UPDATER_DIR/KeyDock-aarch64.app.tar.gz.sig"
+          mv "$DMG_FILE" "$DMG_DIR/KeyDock-universal.dmg"
+          mv "$UPDATER_FILE" "$UPDATER_DIR/KeyDock-universal.app.tar.gz"
+          mv "$UPDATER_SIG_FILE" "$UPDATER_DIR/KeyDock-universal.app.tar.gz.sig"
 
-          echo "DMG=$DMG_DIR/KeyDock-aarch64.dmg" >> "$GITHUB_OUTPUT"
-          echo "UPDATER=$UPDATER_DIR/KeyDock-aarch64.app.tar.gz" >> "$GITHUB_OUTPUT"
-          echo "UPDATER_SIG=$UPDATER_DIR/KeyDock-aarch64.app.tar.gz.sig" >> "$GITHUB_OUTPUT"
+          echo "DMG=$DMG_DIR/KeyDock-universal.dmg" >> "$GITHUB_OUTPUT"
+          echo "UPDATER=$UPDATER_DIR/KeyDock-universal.app.tar.gz" >> "$GITHUB_OUTPUT"
+          echo "UPDATER_SIG=$UPDATER_DIR/KeyDock-universal.app.tar.gz.sig" >> "$GITHUB_OUTPUT"
 
       - name: Generate update.json
         shell: bash
@@ -132,12 +139,14 @@ jobs:
             --arg v "$VERSION" \
             --arg date "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
             --arg sig "$SIG" \
-            --arg url "https://github.com/0xfig-labs/KeyDock/releases/download/${{ github.ref_name }}/KeyDock-aarch64.app.tar.gz" \
+            --arg url "https://github.com/0xfig-labs/KeyDock/releases/download/${{ github.ref_name }}/KeyDock-universal.app.tar.gz" \
             '{
               version: $v,
               pub_date: $date,
               platforms: {
-                "darwin-aarch64": { signature: $sig, url: $url }
+                "darwin-aarch64": { signature: $sig, url: $url },
+                "darwin-x86_64": { signature: $sig, url: $url },
+                "macos-universal": { signature: $sig, url: $url }
               }
             }' > update.json
 
