@@ -1,5 +1,5 @@
 use super::shell_escape_env;
-use crate::{ActivePreset, ShellIntegrationStatus, PresetEnv};
+use crate::{ActivePreset, PresetEnv, ShellIntegrationStatus};
 use anyhow::{anyhow, Context, Result};
 use std::{fs, path::PathBuf};
 

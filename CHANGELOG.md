@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.6.12 - 2026-08-03
+
+### Features
+- CLI: add `keydock plan <preset> [-- <cmd>]` — preview env vars that would be injected without executing the command
+- App: add first-run onboarding for creating a secret and preset
+- CI: avoid Tauri GUI test timeout by testing libraries and checking the app crate
+
 ## 0.6.11 - 2026-07-10
 
 ### Features

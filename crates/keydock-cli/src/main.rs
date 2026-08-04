@@ -31,6 +31,12 @@ enum Commands {
         #[arg(trailing_var_arg = true, required = true)]
         command: Vec<String>,
     },
+    /// Preview what env vars a preset would inject without running the command.
+    Plan {
+        preset: String,
+        #[arg(trailing_var_arg = true)]
+        command: Vec<String>,
+    },
 }
 
 #[derive(Subcommand)]
@@ -75,6 +81,7 @@ fn main() -> Result<()> {
         Commands::Open => open_app(),
         Commands::Preset { command } => handle_preset(command),
         Commands::Run { preset, command } => run(&preset, &command),
+        Commands::Plan { preset, command } => plan(&preset, &command),
     }
 }
 
@@ -113,6 +120,35 @@ fn run(preset: &str, command: &[String]) -> Result<()> {
     if !status.success() {
         std::process::exit(status.code().unwrap_or(1));
     }
+    Ok(())
+}
+
+fn plan(preset: &str, command: &[String]) -> Result<()> {
+    let store = open_store()?;
+    let env = store.resolve_preset_env(preset)?;
+    let cmd_str = if command.is_empty() {
+        "(no command)"
+    } else {
+        &command.join(" ")
+    };
+    println!("Preset:  {preset}");
+    println!("Command: {cmd_str}");
+    if env.is_empty() {
+        println!("Would inject: (none)");
+        return Ok(());
+    }
+    println!("Would inject:");
+    for item in &env {
+        let source = store
+            .get_secret_by_id(&item.secret_id)
+            .ok()
+            .flatten()
+            .map(|s| s.name)
+            .unwrap_or_else(|| item.secret_id.clone());
+        println!("  {:<24} (from: {})", item.env_name, source);
+    }
+    println!();
+    println!("No values are shown. Use 'keydock run' to execute with these vars.");
     Ok(())
 }
 
@@ -323,4 +359,31 @@ fn preset_templates() -> Result<()> {
         println!("  {:20} {}", t.name.to_lowercase(), t.description);
     }
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn plan_accepts_optional_command_after_separator() {
+        let cli = Cli::try_parse_from(["keydock", "plan", "fullstack", "--", "bun", "run", "dev"])
+            .unwrap();
+        match cli.command {
+            Commands::Plan { preset, command } => {
+                assert_eq!(preset, "fullstack");
+                assert_eq!(command, ["bun", "run", "dev"]);
+            }
+            _ => panic!("expected plan command"),
+        }
+    }
+
+    #[test]
+    fn plan_accepts_no_command() {
+        let cli = Cli::try_parse_from(["keydock", "plan", "fullstack"]).unwrap();
+        assert!(matches!(
+            cli.command,
+            Commands::Plan { command, .. } if command.is_empty()
+        ));
+    }
 }

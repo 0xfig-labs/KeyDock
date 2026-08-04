@@ -1,6 +1,6 @@
-use crate::Secret;
 #[cfg(test)]
 use crate::PresetEnv;
+use crate::Secret;
 use anyhow::{anyhow, Context, Result};
 use rusqlite::Connection;
 use std::path::PathBuf;

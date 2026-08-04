@@ -75,6 +75,9 @@ keydock preset current
 # Preview what env vars a preset will export
 keydock preset preview fullstack-dev
 
+# Preview what env vars a command would receive, without executing
+keydock plan fullstack-dev -- bun run dev
+
 # Run a command with a preset injected just for this process
 keydock run fullstack-dev -- bun run dev
 
@@ -146,6 +149,7 @@ keydock preset show <preset>        # Show preset details
 keydock preset preview <preset>     # Preview env vars without activating
 keydock preset activate <preset>    # Activate preset for new shells
 keydock preset current              # Show the active preset
+keydock plan <preset> [-- <cmd>]    # Preview env vars without executing
 keydock preset deactivate           # Remove the active preset cache
 keydock hook <zsh|bash>             # Print shell hook code
 keydock open                        # Open the KeyDock desktop app on macOS

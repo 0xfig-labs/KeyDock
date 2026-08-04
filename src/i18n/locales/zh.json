@@ -321,5 +321,22 @@
     "addedToPreset": "已添加到预设 \"{{presetName}}\"",
     "addToPresetError": "添加字段到预设失败",
     "openFolder": "在访达中显示"
+  },
+  "onboarding": {
+    "serviceTitle": "欢迎使用 KeyDock",
+    "serviceDesc": "将你的第一个 API Key 存入加密保险库，然后通过一条 CLI 命令注入到任何终端进程中。",
+    "skip": "跳过 — 稍后设置",
+    "back": "返回",
+    "keyTitle": "添加你的 {{service}} 密钥",
+    "keyDesc": "你的密钥使用 Argon2id + ChaCha20Poly1305 在本地加密存储，不会离开这台机器。",
+    "createVault": "创建并继续",
+    "doneTitle": "设置完成！",
+    "doneDesc": "你的第一个 Secret 和 Preset 已经就绪。以下是在终端中使用的方式：",
+    "runCmd": "运行时注入环境变量",
+    "planCmd": "执行前预览",
+    "copy": "复制",
+    "copied": "已复制",
+    "goToDashboard": "进入控制台",
+    "error": "设置失败，未保存任何内容"
   }
 }

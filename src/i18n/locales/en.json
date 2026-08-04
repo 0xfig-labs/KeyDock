@@ -321,5 +321,22 @@
     "addedToPreset": "Added to preset \"{{presetName}}\"",
     "addToPresetError": "Failed to add field to preset",
     "openFolder": "Reveal in Finder"
+  },
+  "onboarding": {
+    "serviceTitle": "Welcome to KeyDock",
+    "serviceDesc": "Store your first API key in an encrypted vault, then inject it into any command with a single CLI line.",
+    "skip": "Skip \u2014 I\u2019ll set up later",
+    "back": "Back",
+    "keyTitle": "Add your {{service}} key",
+    "keyDesc": "Your key is encrypted locally with Argon2id + ChaCha20Poly1305. It never leaves this machine.",
+    "createVault": "Create & Continue",
+    "doneTitle": "You\u2019re all set!",
+    "doneDesc": "Your first secret and preset are ready. Here\u2019s how to use them from the terminal:",
+    "runCmd": "Run with env injection",
+    "planCmd": "Preview before running",
+    "copy": "Copy",
+    "copied": "Copied",
+    "goToDashboard": "Go to Dashboard",
+    "error": "Setup failed. Nothing was saved."
   }
 }

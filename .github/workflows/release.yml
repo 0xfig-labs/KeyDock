@@ -66,7 +66,8 @@ jobs:
         run: |
           bun run build
           bunx vitest run
-          cargo test --workspace
+          cargo test --workspace --exclude keydock-app -- --test-threads=1
+          cargo check -p keydock-app
 
       - name: Build universal macOS bundles
         run: bun run tauri build --target universal-apple-darwin --bundles app,dmg

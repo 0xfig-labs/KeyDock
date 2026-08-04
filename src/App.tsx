@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { getVersion } from "@tauri-apps/api/app"
 import { LockScreen } from "@/components/layout/LockScreen"
@@ -9,6 +9,7 @@ import { DashboardTab } from "@/components/dashboard/DashboardTab"
 import { SecretsTab } from "@/components/secrets/SecretsTab"
 import { SettingsTab } from "@/components/settings/SettingsTab"
 import { PresetsTab } from "@/components/presets/PresetsTab"
+import { OnboardingWizard } from "@/components/onboarding/OnboardingWizard"
 import { useAudit } from "@/hooks/useAudit"
 import { useSecrets } from "@/hooks/useSecrets"
 import { useToast } from "@/hooks/useToast"
@@ -30,10 +31,11 @@ export function App() {
   const { t } = useTranslation()
   const { show } = useToast()
   const { update, checkForUpdates, installUpdate } = useUpdate()
-
   const [activeTab, setActiveTab] = useState<Tab>("dashboard")
   const [selectedSecretId, setSelectedSecretId] = useState("")
   const [currentVersion, setCurrentVersion] = useState("")
+  const [showOnboarding, setShowOnboarding] = useState(false)
+  const onboardingChecked = useRef(false)
 
   useEffect(() => {
     getVersion().then(setCurrentVersion).catch(() => setCurrentVersion(""))
@@ -50,6 +52,16 @@ export function App() {
     secrets.refresh,
     presets.refresh,
   ])
+
+  // Detect first-time user after initial data load
+  useEffect(() => {
+    if (!vault.ready || onboardingChecked.current) return
+    if (secrets.loading || presets.loading) return
+    onboardingChecked.current = true
+    if (secrets.secrets.length === 0 && presets.presets.length === 0) {
+      setShowOnboarding(true)
+    }
+  }, [vault.ready, secrets.loading, presets.loading, secrets.secrets.length, presets.presets.length])
 
   async function handleLock() {
     try {
@@ -75,12 +87,27 @@ export function App() {
     setActiveTab(tab)
   }
 
+  const handleOnboardingComplete = useCallback(async () => {
+    setShowOnboarding(false)
+    await secrets.refresh()
+    await presets.refresh()
+  }, [secrets.refresh, presets.refresh])
+
   if (!vault.ready) {
     return (
       <>
         <LockScreen vault={vault} />
         <ToastView />
       </>
+    )
+  }
+
+  if (showOnboarding) {
+    return (
+      <div className="min-h-screen bg-background text-foreground font-sans flex antialiased">
+        <OnboardingWizard onComplete={handleOnboardingComplete} />
+        <ToastView />
+      </div>
     )
   }
 
